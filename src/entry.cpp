@@ -1,15 +1,12 @@
 #include <iostream>
 #include "expression.hpp"
-
-double test(double x) noexcept
-{
-	// x^3 - x - 2
-	return std::pow(x, 3) - x - 2;
-}
+#include "test_case.hpp"
 
 int main() noexcept
 {
-	std::printf("Deriative: [%f]\n", expression<test>().deriative(0.0));
-	std::printf("Bisection: [%f]\n", expression<test>().bisection(std::make_pair(1.0, 2.0)));
-	std::printf("Newton Raphson: [%f]\n", expression<test>().newton_raphson(5.0));
+	using my_precision_t = double;
+
+	std::printf("Deriative: [%f]\n",		expression<test_case::one<my_precision_t>>().deriative(0.0));
+	std::printf("Bisection: [%f]\n",		expression<test_case::one<my_precision_t>>().bisection( std::make_pair(-1.0, 1.0) ));
+	std::printf("Newton Raphson: [%f]\n",	expression<test_case::two<my_precision_t>>().newton_raphson(5.0));
 }

@@ -23,5 +23,8 @@
     <ClInclude Include="expression.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="test_case.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

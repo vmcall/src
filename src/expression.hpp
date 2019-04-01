@@ -8,6 +8,9 @@ template <auto Fn>
 class expression
 {
 public:
+	// NUMBER OF SIGNIFICANT DIGITS IN OPERATIONS
+	constexpr static auto PRECISION = 0.00000001;
+
 	// EVALUATE THE EXPRESSION WITH AN ARBITRARY VARIABLE
 	template <class T>
 	auto evaluate(const T value) 
@@ -35,23 +38,24 @@ public:
 	auto inline newton_raphson(const T value)
 		const noexcept -> decltype(Fn(value))
 	{
-		// CALCULATE NEW VALUE
+		// CALCULATE NEW VALUE FROM THE FORMULA
+		// N_A+1 = N_A - F(N_A)/F'(N_A)
 		const auto new_value = value - (Fn(value) / this->deriative(value));
 
 		auto has_acceptable_precision = [](T x, T y) -> T
 		{
-			constexpr auto precision = 0.00000001; // DETERMINES EQUALITY PRECISION
-			return std::abs(x - y) < precision;
+			return std::abs(x - y) < PRECISION;
 		};
 
+		// RETURN WHEN RESULT IS SUFFICIENTLY PRECISE
 		if (has_acceptable_precision(value, new_value))
 			return new_value;
 
-		// NOT IMPLEMENTED
+		// ITERATE
 		return this->newton_raphson(new_value);
 	}
 
-	// BISECTION ANALYSIS
+	// BISECTION
 	template <class T>
 	auto inline bisection(std::pair<T, T> interval) 
 		const noexcept -> decltype(Fn(interval.first))
@@ -64,8 +68,7 @@ public:
 		const auto mid = Fn(mid_point);
 
 		// FOUND ROOT?
-		constexpr auto precision = 0.00000001; // DECREASE TO INCREASE PRECISION-LEEWAY
-		if (std::abs(mid) < precision)
+		if (std::abs(mid) < PRECISION)
 			return mid_point;
 
 		// CHECK SIGN CHANGE AND UPDATE INTERVAL
@@ -81,4 +84,4 @@ public:
 
 		return this->bisection<T>(interval);
 	}
-};
+}
