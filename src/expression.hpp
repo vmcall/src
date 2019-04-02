@@ -84,4 +84,4 @@ public:
 
 		return this->bisection<T>(interval);
 	}
-}
+};
