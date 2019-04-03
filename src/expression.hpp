@@ -9,7 +9,7 @@ class expression
 {
 public:
 	// NUMBER OF SIGNIFICANT DIGITS IN OPERATIONS
-	constexpr static auto PRECISION = 0.00000001;
+	constexpr static auto PRECISION = 1.0e-13;
 
 	// EVALUATE THE EXPRESSION WITH AN ARBITRARY VARIABLE
 	template <class T>
@@ -31,7 +31,7 @@ public:
 
 		// CALCULATE SLOPE
 		return (Fn(value + delta) - Fn(value)) / delta;
-	}
+	} 
 
 	// NEWTON-RAPHSON
 	template <class T>
