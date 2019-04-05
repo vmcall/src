@@ -9,7 +9,7 @@ class expression
 {
 public:
 	// NUMBER OF SIGNIFICANT DIGITS IN OPERATIONS
-	constexpr static auto PRECISION = 1.0e-13;
+	constexpr static auto PRECISION = 0.00000000000001; // 15 DIGITS FOR DOUBLE
 
 	// EVALUATE THE EXPRESSION WITH AN ARBITRARY VARIABLE
 	template <class T>
@@ -19,15 +19,22 @@ public:
 		return Fn(value);
 	}
 
-	// CALCULATE DERIATIVE
+	// CALCULATE DERIVATIVE
 	template <class T>
-	auto inline deriative(const T value) 
+	auto inline derivative_2(const T value, const T delta)
+		const noexcept -> decltype(Fn(value))
+	{
+		// CALCULATE SLOPE
+		return (Fn(value + delta) - Fn(value)) / delta;
+	}
+
+	// CALCULATE DERIVATIVE
+	template <class T>
+	auto inline derivative(const T value) 
 		const noexcept -> decltype(Fn(value))
 	{
 		// SMALLEST POSSIBLE CHANGE IN A DOUBLE
-
-		// REMEMBER TO DOCUMENT THIS
-		const auto delta = std::sqrt( std::numeric_limits<double>::epsilon() ); // 1.49011611938476562e-8
+		const auto delta = std::sqrt( std::numeric_limits<T>::epsilon() ); 
 
 		// CALCULATE SLOPE
 		return (Fn(value + delta) - Fn(value)) / delta;
@@ -40,7 +47,7 @@ public:
 	{
 		// CALCULATE NEW VALUE FROM THE FORMULA
 		// N_A+1 = N_A - F(N_A)/F'(N_A)
-		const auto new_value = value - (Fn(value) / this->deriative(value));
+		const auto new_value = value - (Fn(value) / this->derivative(value));
 
 		auto has_acceptable_precision = [](T x, T y) -> T
 		{

@@ -22,8 +22,8 @@ public:
 
 		// RETURN THE TIME DELTA IN PREFERED, ARBITRARY TYPE
 		return std::make_pair(
-			std::chrono::duration_cast<T>(end_time - start_time), 
-			result);
+			std::chrono::duration_cast<T>(end_time - start_time),	// TIME DELTA
+			result);												// EXPRESSION RESULT
 	}
 private:
 	Fn_t m_expression;

@@ -2,7 +2,8 @@
 
 int main() noexcept
 {
-	analysis::first();
-	analysis::second();
-	analysis::third();
+	analysis::test();
+	//analysis::first();
+	//analysis::second();
+	//analysis::third();
 }

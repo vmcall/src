@@ -9,6 +9,36 @@ class analysis
 	using my_precision_t = double;
 
 public:
+	static inline auto test_precision()
+		noexcept -> void
+	{
+		const auto expr = expression<test_case::two<my_precision_t>>();
+		constexpr auto value = 12.345678;
+		constexpr auto real_derivative = 456.247295839052;
+
+		const auto base = std::sqrt(std::numeric_limits<double>::epsilon());
+
+		auto min_precision = 1.0;
+		auto best_delta = expr.derivative(value);
+
+		for (double i = -0.0000001; i < 0.0000001; i += std::numeric_limits<double>::epsilon())
+		{
+			const auto derivative = expr.derivative_2(value, base + i);
+			const auto precision = std::abs(real_derivative - derivative);
+
+			if (precision < min_precision)
+			{
+				min_precision = precision;
+				best_delta = base + i;
+			}
+		}
+		
+		printf("[Real]      %.15f\n", real_derivative);
+		printf("[Brute]     %.15f\n", expr.derivative_2(value, best_delta));
+		printf("[Precision] %.15f\n", min_precision);
+		printf("[Delta]	    %.15f\n", best_delta);
+	}
+
 	static inline auto first()
 		noexcept -> void
 	{
@@ -36,7 +66,6 @@ public:
 		std::printf(" [Bisection]      %.10f - Took %lld ns\n", result_bisection, time_bisection.count());
 		std::printf(" [Newton-Raphson] %.10f - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
 	}
-
 
 	static inline auto second()
 		noexcept -> void
