@@ -32,5 +32,8 @@
     <ClInclude Include="analysis.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="math_constant.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

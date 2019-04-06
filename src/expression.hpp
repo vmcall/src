@@ -4,6 +4,8 @@
 #include <limits>
 #include <math.h>
 
+#include "math_constant.hpp"
+
 template <auto Fn>
 class expression
 {
@@ -34,10 +36,9 @@ public:
 		const noexcept -> decltype(Fn(value))
 	{
 		// SMALLEST POSSIBLE CHANGE IN A DOUBLE
-		const auto delta = std::sqrt( std::numeric_limits<T>::epsilon() ); 
 
 		// CALCULATE SLOPE
-		return (Fn(value + delta) - Fn(value)) / delta;
+		return (Fn(value + math_constant::best_delta) - Fn(value)) / math_constant::best_delta;
 	} 
 
 	// NEWTON-RAPHSON

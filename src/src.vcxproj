@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="analysis.hpp" />
     <ClInclude Include="expression.hpp" />
+    <ClInclude Include="math_constant.hpp" />
     <ClInclude Include="test_case.hpp" />
     <ClInclude Include="timer.hpp" />
   </ItemGroup>
