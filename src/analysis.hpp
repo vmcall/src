@@ -50,10 +50,10 @@ public:
 		}
 		
 		// OUTPUT BRUTEFORCE RESULTS
-		std::printf(" [Real]      %.15f\n", real_derivative);
-		std::printf(" [Brute]     %.15f\n", expr.derivative_2(value, bruteforced_delta));
-		std::printf(" [Precision] %.15f\n", min_precision);
-		std::printf(" [Delta]	  %.15f\n", bruteforced_delta);
+		std::printf(" [Real]      %.12f\n", real_derivative);
+		std::printf(" [Brute]     %.12f\n", expr.derivative_2(value, bruteforced_delta));
+		std::printf(" [Precision] %.14f\n", min_precision);
+		std::printf(" [Delta]     %.14f\n", bruteforced_delta);
 
 		return bruteforced_delta;
 	}
@@ -61,12 +61,7 @@ public:
 	static inline auto override_precision()
 		noexcept -> void
 	{
-		std::printf("Overriding precision delta..\n");
-
-		// CALCULATED BY analysis::guess_precision
-		math_constant::best_delta = -0.000000072700297;
-
-		std::printf(" [Delta] %.15f\n", math_constant::best_delta);
+		math_constant::best_delta = analysis::guess_precision();
 	}
 
 	static inline auto sample_newton_raphson()
@@ -133,8 +128,8 @@ public:
 		}).time<std::chrono::nanoseconds>( std::make_pair(-6.0, 2.0) );
 
 		// PRINT
-		std::printf(" [Bisection]      %.10f - Took %lld ns\n", result_bisection, time_bisection.count());
-		std::printf(" [Newton-Raphson] %.10f - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
+		std::printf(" [Bisection]      %.14f - Took %lld ns\n", result_bisection, time_bisection.count());
+		std::printf(" [Newton-Raphson] %.14f - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
 	}
 
 	static inline auto second()
@@ -161,8 +156,8 @@ public:
 		}).time<std::chrono::nanoseconds>(std::make_pair(1.0, 2.0));
 
 		// PRINT
-		std::printf(" [Bisection]      %.10f - Took %lld ns\n", result_bisection, time_bisection.count());
-		std::printf(" [Newton-Raphson] %.10f - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
+		std::printf(" [Bisection]      %.14f - Took %lld ns\n", result_bisection, time_bisection.count());
+		std::printf(" [Newton-Raphson] %.14f - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
 	}
 
 	static inline auto third()
@@ -181,6 +176,6 @@ public:
 		}).time<std::chrono::nanoseconds>(std::make_pair(-1.0, 1.0));
 
 		// PRINT
-		std::printf(" [Bisection]      %.10f - Took %lld ns\n", result_bisection, time_bisection.count());
+		std::printf(" [Bisection]      %.14f - Took %lld ns\n", result_bisection, time_bisection.count());
 	}
 };

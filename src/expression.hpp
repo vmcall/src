@@ -35,8 +35,6 @@ public:
 	auto inline derivative(const T value) 
 		const noexcept -> decltype(Fn(value))
 	{
-		// SMALLEST POSSIBLE CHANGE IN A DOUBLE
-
 		// CALCULATE SLOPE
 		return (Fn(value + math_constant::best_delta) - Fn(value)) / math_constant::best_delta;
 	} 
