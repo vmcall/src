@@ -11,7 +11,7 @@ class expression
 {
 public:
 	// NUMBER OF SIGNIFICANT DIGITS IN OPERATIONS
-	constexpr static auto PRECISION = 0.00000000000001; // 15 DIGITS FOR DOUBLE
+	constexpr static auto PRECISION = math_constant::my_precision_t{0.000000000000001}; // 15 DIGITS FOR DOUBLE
 
 	// EVALUATE THE EXPRESSION WITH AN ARBITRARY VARIABLE
 	template <class T>
@@ -23,7 +23,7 @@ public:
 
 	// CALCULATE DERIVATIVE
 	template <class T>
-	auto inline derivative_2(const T value, const T delta)
+	auto inline derivative_custom(const T value, const T delta)
 		const noexcept -> decltype(Fn(value))
 	{
 		// CALCULATE SLOPE
@@ -45,16 +45,11 @@ public:
 		const noexcept -> decltype(Fn(value))
 	{
 		// CALCULATE NEW VALUE FROM THE FORMULA
-		// N_A+1 = N_A - F(N_A)/F'(N_A)
+		// N_(A+1) = N_A - F(N_A)/F'(N_A)
 		const auto new_value = value - (Fn(value) / this->derivative(value));
 
-		auto has_acceptable_precision = [](T x, T y) -> T
-		{
-			return std::abs(x - y) < PRECISION;
-		};
-
 		// RETURN WHEN RESULT IS SUFFICIENTLY PRECISE
-		if (has_acceptable_precision(value, new_value))
+		if (std::abs(value - new_value) < PRECISION)
 			return new_value;
 
 		// ITERATE
@@ -70,7 +65,7 @@ public:
 		auto& [begin, end] = interval;
 
 		// CALCULATE MIDPOINT
-		const auto mid_point = (begin + end) / 2.0;
+		const auto mid_point = (begin + end) / T{2.0};
 		const auto mid = Fn(mid_point);
 
 		// FOUND ROOT?
@@ -78,15 +73,8 @@ public:
 			return mid_point;
 
 		// CHECK SIGN CHANGE AND UPDATE INTERVAL
-		const auto begin_eval = Fn(begin);
-		if (std::signbit(begin_eval) == std::signbit(mid))
-		{
-			begin = mid_point;
-		}
-		else
-		{
-			end = mid_point;
-		}
+		const auto sign_changed = std::signbit(Fn(begin)) != std::signbit(mid);
+		(sign_changed ? end : begin) = mid_point;
 
 		return this->bisection<T>(interval);
 	}

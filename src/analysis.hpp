@@ -36,7 +36,7 @@ public:
 				  i += std::numeric_limits<math_constant::my_precision_t>::epsilon())
 		{
 			// CALCULATE DERIVATIVE FROM CURRENT, GUESSED DELTA
-			const auto derivative = expr.derivative_2(value, estimated_delta + i);
+			const auto derivative = expr.derivative_custom(value, estimated_delta + i);
 
 			// CALCULATE PRECISION FOR COMPARISON
 			const auto precision = std::abs(real_derivative - derivative);
@@ -50,10 +50,10 @@ public:
 		}
 		
 		// OUTPUT BRUTEFORCE RESULTS
-		std::printf(" [Real]      %.12f\n", real_derivative);
-		std::printf(" [Brute]     %.12f\n", expr.derivative_2(value, bruteforced_delta));
-		std::printf(" [Precision] %.14f\n", min_precision);
-		std::printf(" [Delta]     %.14f\n", bruteforced_delta);
+		std::printf(" [Real]      %.12lf\n", real_derivative);
+		std::printf(" [Brute]     %.12lf\n", expr.derivative_custom(value, bruteforced_delta));
+		std::printf(" [Precision] %.14lf\n", min_precision);
+		std::printf(" [Delta]     %.14lf\n", bruteforced_delta);
 
 		return bruteforced_delta;
 	}
@@ -78,9 +78,9 @@ public:
 		auto samples = std::array<std::uint64_t, execution_interval>();
 
 		// SUM EXECUTION TIMES
-		for (size_t i = 0; i < sample_count; i++)
+		for (auto i = 0; i < sample_count; i++)
 		{
-			for (double guess = 1.0; guess < execution_interval; guess++)
+			for (auto guess = 1; guess < execution_interval; guess++)
 			{
 				// TIME NEWTON RAPHSON
 				const auto[time_newton_raphson, result_newton_raphson] = timer(
@@ -88,7 +88,7 @@ public:
 					-> math_constant::my_precision_t
 				{
 					return expr.newton_raphson(val);
-				}).time<std::chrono::nanoseconds>(i);
+				}).time<std::chrono::nanoseconds>( static_cast<math_constant::my_precision_t>(i) );
 
 				// ADD EXECUTION TIME TO LIST OF SAMPLES
 				samples[guess] += time_newton_raphson.count();
@@ -128,8 +128,8 @@ public:
 		}).time<std::chrono::nanoseconds>( std::make_pair(-6.0, 2.0) );
 
 		// PRINT
-		std::printf(" [Bisection]      %.14f - Took %lld ns\n", result_bisection, time_bisection.count());
-		std::printf(" [Newton-Raphson] %.14f - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
+		std::printf(" [Bisection]      %.14lf - Took %lld ns\n", result_bisection, time_bisection.count());
+		std::printf(" [Newton-Raphson] %.14lf - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
 	}
 
 	static inline auto second()
@@ -156,8 +156,8 @@ public:
 		}).time<std::chrono::nanoseconds>(std::make_pair(1.0, 2.0));
 
 		// PRINT
-		std::printf(" [Bisection]      %.14f - Took %lld ns\n", result_bisection, time_bisection.count());
-		std::printf(" [Newton-Raphson] %.14f - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
+		std::printf(" [Bisection]      %.14lf - Took %lld ns\n", result_bisection, time_bisection.count());
+		std::printf(" [Newton-Raphson] %.14lf - Took %lld ns\n", result_newton_raphson, time_newton_raphson.count());
 	}
 
 	static inline auto third()
@@ -176,6 +176,6 @@ public:
 		}).time<std::chrono::nanoseconds>(std::make_pair(-1.0, 1.0));
 
 		// PRINT
-		std::printf(" [Bisection]      %.14f - Took %lld ns\n", result_bisection, time_bisection.count());
+		std::printf(" [Bisection]      %.14lf - Took %lld ns\n", result_bisection, time_bisection.count());
 	}
 };
