@@ -114,7 +114,7 @@ public:
 		// TIME NEWTON RAPHSON
 		const auto[time_newton_raphson, result_newton_raphson] = timer(
 			[&](const math_constant::my_precision_t val)
-				-> math_constant::my_precision_t
+			-> math_constant::my_precision_t
 		{
 			return expr.newton_raphson(val);
 		}).time<std::chrono::nanoseconds>(1.00);
@@ -122,10 +122,11 @@ public:
 		// TIME BISECTION
 		const auto[time_bisection, result_bisection] = timer(
 			[&](const std::pair<math_constant::my_precision_t, math_constant::my_precision_t> val)
-				-> math_constant::my_precision_t
+			-> math_constant::my_precision_t
 		{
 			return expr.bisection(val);
-		}).time<std::chrono::nanoseconds>( std::make_pair(-6.0, 2.0) );
+		}).time<std::chrono::nanoseconds>(std::make_pair(-6.0, 2.0));
+
 
 		// PRINT
 		std::printf(" [Bisection]      %.14lf - Took %lld ns\n", result_bisection, time_bisection.count());

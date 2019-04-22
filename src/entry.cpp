@@ -15,8 +15,6 @@ int main() noexcept
 	analysis::second();
 	analysis::third();
 	
-	system("pause");
-
 	// CALCULATE NEWTON RAPHSON SPEED
-	//analysis::sample_newton_raphson();
+	analysis::sample_newton_raphson();
 }
